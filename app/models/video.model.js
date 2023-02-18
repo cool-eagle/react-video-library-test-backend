@@ -38,6 +38,20 @@ Video.getById = (id, result) => {
   });
 };
 
+Video.deleteById = (id, result) => {
+  sql.query("DELETE FROM video WHERE video_id = ?", id, (err, res) => {
+    if (err) {
+      result(err, null);
+      return;
+    }
+    if (res.affectedRows === 0) {
+      result({ kind: "not_found" }, null);
+      return;
+    }
+    result(null, res);
+  });
+};
+
 Video.getByCategory = (category, result) => {
   sql.query(
     "SELECT v.* FROM video v, video_genre vg WHERE v.video_id = vg.video_id and vg.genre_id = ?",

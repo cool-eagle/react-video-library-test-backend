@@ -6,7 +6,7 @@ exports.getByCategory = (req, res) => {
     Video.getAll((err, data) => {
       if (err) {
         if (err.kind === "not_found") {
-          res.status(404).send({
+          res.status(200).send({
             message: "Not found any video",
           });
         } else {
@@ -14,13 +14,13 @@ exports.getByCategory = (req, res) => {
             message: "Server error",
           });
         }
-      } else res.status(200).send(data);
+      } else res.status(200).send({ data });
     });
   } else {
     Video.getByCategory(category, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
-          res.status(404).send({
+          res.status(200).send({
             message: `Not found video with category ${category}`,
           });
         } else {
@@ -28,7 +28,7 @@ exports.getByCategory = (req, res) => {
             message: `Server error with category ${category}` + err,
           });
         }
-      } else res.status(200).send(data);
+      } else res.status(200).send({ data });
     });
   }
 };
@@ -38,7 +38,7 @@ exports.getById = (req, res) => {
   Video.getById(id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
-        res.status(404).send({
+        res.status(200).send({
           message: `Not found video with id ${id}`,
         });
       } else {
@@ -46,6 +46,25 @@ exports.getById = (req, res) => {
           message: `Server error with id ${id}` + err,
         });
       }
-    } else res.status(200).send(data);
+    } else res.status(200).send({ data });
+  });
+};
+
+exports.deleteById = (req, res) => {
+  const id = req.params.id;
+  Video.deleteById(id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(200).send({
+          message: `Not found video with id ${id}`,
+        });
+      } else {
+        res.status(500).send({
+          message: `Server error with id ${id}` + err,
+        });
+      }
+    } else {
+      res.status(204).send();
+    }
   });
 };
