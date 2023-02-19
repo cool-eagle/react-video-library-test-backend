@@ -37,6 +37,24 @@ Video.getById = (id, result) => {
     result({ kind: "not_found" }, null);
   });
 };
+Video.getByIdCategory = (id, result) => {
+  sql.query(
+    "SELECT genre_id FROM video_genre WHERE video_id = ?",
+    id,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+      if (res.length) {
+        result(null, res);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    }
+  );
+};
 
 Video.deleteById = (id, result) => {
   sql.query("DELETE FROM video WHERE video_id = ?", id, (err, res) => {
@@ -91,33 +109,18 @@ Video.addVideoGenre = (data, result) => {
 };
 
 Video.addVideo = (video, result) => {
-  sql.query(
-    "INSERT INTO video SET ?",
-    video,
-    (err, res) => {
-      console.log('res: ', res);
-      if (err) {
-        result(err, null);
-        return;
-      }
-      if (res.affectedRows === 0) {
-        result({ kind: "not_found" }, null);
-        return;
-      }
-      result(null, res);
+  sql.query("INSERT INTO video SET ?", video, (err, res) => {
+    console.log("res: ", res);
+    if (err) {
+      result(err, null);
+      return;
     }
-  );
+    if (res.affectedRows === 0) {
+      result({ kind: "not_found" }, null);
+      return;
+    }
+    result(null, res);
+  });
 };
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = Video;

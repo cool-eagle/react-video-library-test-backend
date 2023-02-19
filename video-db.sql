@@ -134,7 +134,7 @@ ALTER TABLE `genre`
 -- Indexes for table `video`
 --
 ALTER TABLE `video`
-  ADD UNIQUE KEY `video-number` (`video_id`);
+  ADD UNIQUE KEY `video_id` (`video_id`);
 
 --
 -- Indexes for table `video_genre`
