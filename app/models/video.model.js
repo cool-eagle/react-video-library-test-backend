@@ -70,4 +70,54 @@ Video.getByCategory = (category, result) => {
     }
   );
 };
+
+Video.addVideoGenre = (data, result) => {
+  sql.query(
+    "INSERT INTO video_genre SET video_id=?, genre_id = ?",
+    data,
+    (err, res) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+      if (res.length) {
+        result(null, res);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    }
+  );
+};
+
+Video.addVideo = (video, result) => {
+  sql.query(
+    "INSERT INTO video SET ?",
+    video,
+    (err, res) => {
+      console.log('res: ', res);
+      if (err) {
+        result(err, null);
+        return;
+      }
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+      result(null, res);
+    }
+  );
+};
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = Video;
